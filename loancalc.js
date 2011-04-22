@@ -2,7 +2,7 @@
 	global.LOANCALC = {
 		monthlyPayment: function(principal, rate, months) {
 			var payment = 0,
-				interest = rate / (12 * 100);
+			    interest = this.interest(rate);
 
 			if (principal > 0 && months > 0) {
 				// Here's a pretty version of what we're doing here:
@@ -27,7 +27,11 @@
 			//
 			// rate is a percentage.  For example, for a 6% interest rate, rate should be 6.
 			// (that is, don't pass 0.06)
-			return balance * (rate / (12 * 100));
+			return balance * this.interest(rate);
+		},
+		
+		interest: function(rate) {
+			return rate / 1200;
 		}
 	};
 }(this));
