@@ -1,37 +1,13 @@
-(function(global) {
-	global.LOANCALC = {
-		monthlyPayment: function(principal, rate, months) {
-			var payment = 0,
-			    interest = this.interest(rate);
+export const calculateMonthlyPayment = (principal, rate, months) => {
+	const interest = calculateInterest(rate);
 
-			if (principal > 0 && months > 0) {
-				// Here's a pretty version of what we're doing here:
-				//
-				//                                   interest
-				// payment = principal x --------------------------------
-				//                        1 - ((1 + interest) ^ -months)
-				//
-				// found this rad formula here: http://www.hughchou.org/calc/formula.html
-				if (rate != 0) {
-					payment = principal * (interest / (1 - Math.pow((1 + interest), -(months))));
-				} else {
-					// In case they want to calculate a payment schedule with 0% interest
-					payment = principal / months;
-				}
-			}
-			return payment;
-		},
+	if (principal <= 0 || months <= 0) {
+		return 0;
+	}
 
-		interestOnBalance: function(balance, rate) {
-			// For calculating monthly interest.
-			//
-			// rate is a percentage.  For example, for a 6% interest rate, rate should be 6.
-			// (that is, don't pass 0.06)
-			return balance * this.interest(rate);
-		},
-		
-		interest: function(rate) {
-			return rate / 1200;
-		}
-	};
-}(this));
+	return principal * ((rate === 0) ? (1 / months) : (interest / (1 - Math.pow((1 + interest), -(months)))));
+};
+
+export const calculateInterestOnBalance = (balance, rate) => balance * calculateInterest(rate);
+
+const calculateInterest = rate => rate / 1200;
